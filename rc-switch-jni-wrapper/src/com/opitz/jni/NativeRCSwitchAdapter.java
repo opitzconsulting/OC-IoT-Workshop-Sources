@@ -36,13 +36,18 @@ public class NativeRCSwitchAdapter {
         }
 
         try {
-            // TODO load the native libraries here. set workingNativeCode to true if successful
+            System.out.println("+++++++++++" + System.getProperty("java.library.path"));
+            System.loadLibrary("RCSwitchAdapter");
+            System.load("/usr/local/lib/libRCSwitchAdapter.so");
+            System.out.println("+++++++++++" + "loading librarys worked");
+            workingNativeCode = true;
         } catch (UnsatisfiedLinkError e) {
             System.out.println("## " + e.getMessage() + " ##");
         }
 
     }
 
-    //TODO add the method stubs for the native interfaces
+    public native void switchOn(String group, String unit);
 
+    public native void switchOff(String group, String unit);
 }
