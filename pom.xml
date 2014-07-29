@@ -7,11 +7,11 @@
 	<packaging>pom</packaging>
 	<name>${project.groupId} - ${project.artifactId}</name>
 	<modules>
-		<!--<module>common-domain</module>
-		<module>persistence</module>-->
+		<module>common-domain</module>
+		<module>persistence</module>
 		<module>rc-switch-jni-wrapper</module>
-		<!--<module>spring-service</module>
-		<module>rest-camunda</module>-->
+		<module>spring-service</module>
+		<module>rest-camunda</module>
 	</modules>
 
 	<properties>

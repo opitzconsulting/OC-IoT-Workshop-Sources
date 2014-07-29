@@ -1,0 +1,131 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.opitz.iot</groupId>
+		<artifactId>OC_IoT_Workshop</artifactId>
+		<version>1.0</version>
+	</parent>
+
+	<artifactId>rest-camunda</artifactId>
+	<packaging>war</packaging>
+	<name>${project.groupId} - ${project.artifactId}</name>
+
+	<build>
+        	<finalName>iot-spring-bpm</finalName>
+		<plugins>		
+		  <plugin>
+			<groupId>org.codehaus.cargo</groupId>
+			<artifactId>cargo-maven2-plugin</artifactId>
+			<!--Configuration for remote server -->			
+			<configuration>
+				<container>
+					<containerId>jetty9x</containerId>
+					<type>remote</type>
+				</container>
+				<configuration>
+					<type>runtime</type>
+					<properties>
+						<cargo.hostname>192.168.1.102</cargo.hostname>
+						<cargo.servlet.port>8080</cargo.servlet.port>
+						<cargo.remote.username>cargo</cargo.remote.username>
+						<cargo.remote.password>cargo</cargo.remote.password>
+					</properties>
+				</configuration>
+				<deployer>
+					<type>remote</type>
+				</deployer>
+				<deployables>
+					<deployable>
+						<groupId>com.opitz.iot</groupId>
+						<artifactId>rest-camunda</artifactId>
+						<type>war</type>
+						<properties>
+							<context>/IoT_Spring_BPM</context>
+						</properties>
+					</deployable>
+						</deployables>
+			</configuration>
+			<!--Configuration for local server -->
+			<!--<configuration>
+            			<container>
+			              <containerId>tomcat7x</containerId>
+            			</container>
+            			<configuration>
+              				<type>existing</type>
+      					<home>/home/developer/server/apache-tomcat-7.0.53</home>
+            			</configuration>
+          		</configuration>-->
+		  </plugin>
+		</plugins>
+        </build>
+
+	<dependencies>
+		<!-- IoT_Spring_BPM -->
+		<dependency>
+			<groupId>com.opitz.iot</groupId>
+			<artifactId>common-domain</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.opitz.iot</groupId>
+			<artifactId>spring-service</artifactId>
+			<version>${project.version}</version>
+		</dependency>	
+
+		<!-- Camunda -->
+		<dependency>
+			<groupId>org.camunda.bpm</groupId>
+			<artifactId>camunda-engine</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.camunda.bpm</groupId>
+			<artifactId>camunda-engine-spring</artifactId>
+		</dependency>
+
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- drools -->
+		<dependency>
+			<groupId>org.drools</groupId>
+			<artifactId>drools-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.drools</groupId>
+			<artifactId>drools-compiler</artifactId>
+		</dependency>
+
+		<!-- others -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
