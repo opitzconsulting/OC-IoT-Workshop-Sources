@@ -1,5 +1,6 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xmlns:tx="http://www.springframework.org/schema/tx" xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -16,9 +17,9 @@
         http://www.springframework.org/schema/task/spring-task.xsd">
 
 
-    <context:property-placeholder location="classpath:hibernate.properties" />
+    <context:property-placeholder location="classpath:hibernate.properties"/>
 
-    <context:component-scan base-package="com.opitz.iotprototype" />
+    <context:component-scan base-package="com.opitz.iotprototype"/>
 
     <mvc:annotation-driven>
         <mvc:message-converters>
@@ -26,14 +27,14 @@
             <bean
                     class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                 <property name="objectMapper">
-                    <bean class="com.opitz.iotprototype.utils.HibernateAwareObjectMapper" />
+                    <bean class="com.opitz.iotprototype.utils.HibernateAwareObjectMapper"/>
                 </property>
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
-    <mvc:default-servlet-handler />
+    <mvc:default-servlet-handler/>
 
-    <tx:annotation-driven />
+    <tx:annotation-driven/>
     <bean id="transactionManager"
           class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"></property>
@@ -41,7 +42,7 @@
 
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
+        <property name="dataSource" ref="dataSource"/>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
@@ -62,15 +63,16 @@
           class="org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy">
         <property name="targetDataSource">
             <bean class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-                <property name="driverClass" value="${jdbc.driverClassName}" />
-                <property name="url" value="${jdbc.url}" />
-                <property name="username" value="${jdbc.user}" />
-                <property name="password" value="${jdbc.pass}" />
+                <property name="driverClass" value="${jdbc.driverClassName}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.user}"/>
+                <property name="password" value="${jdbc.pass}"/>
             </bean>
         </property>
     </bean>
 
     <bean id="persistenceExceptionTranslationPostProcessor"
-          class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
+          class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
 
 </beans>
+
