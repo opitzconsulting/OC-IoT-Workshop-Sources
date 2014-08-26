@@ -1,6 +1,6 @@
 package com.opitz.iotprototype.entities;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -17,5 +17,57 @@ import java.io.Serializable;
 @Entity
 public class ElroPowerPlug implements Serializable {
 
+    private Integer id;
+    private String label;
+    private String switchID;
+    private String groupID; // 5 bit binary code for a certain plug
+    private boolean lastKnownState;
 
+    // Getter Setter
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @Basic(optional = false)
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    @Basic(optional = false)
+    public String getSwitchID() {
+        return switchID;
+    }
+
+    public void setSwitchID(String switchID) {
+        this.switchID = switchID;
+    }
+
+    @Basic(optional = false)
+    public String getGroupID() {
+        return groupID;
+    }
+
+    public void setGroupID(String groupID) {
+        this.groupID = groupID;
+    }
+
+    @Basic(optional = true)
+    public boolean isLastKnownState() {
+        return lastKnownState;
+    }
+
+    public void setLastKnownState(boolean lastKnownState) {
+        this.lastKnownState = lastKnownState;
+    }
 }

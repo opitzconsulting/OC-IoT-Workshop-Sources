@@ -16,14 +16,65 @@ public class User implements Serializable {
 
 
 
-    /* UNCOMMENT ONCE COMPLETED
+    /**
+     * duplicate can be found in oracle-cep. Please make sure to update any new required fields added to this class in the oracle-cep module as well.
+     */
+    private Integer id;
+    private String username;
+    private NetworkNode personalDevice;
+    private UserState state;
+
+	/* private String passwordHash; */
+
+    public User(){
+        //have user state default. Gets overridden if existent by hibernate.
+        state = UserState.OFFLINE;
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    @Basic(optional = false)
+    @Column(unique = true)
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @OneToOne(fetch = FetchType.EAGER)
+    public NetworkNode getPersonalDevice() {
+        return personalDevice;
+    }
+
+    public void setPersonalDevice(NetworkNode phone) {
+        this.personalDevice = phone;
+    }
+
+    @Basic(optional = true)
+    public UserState getState() {
+        return state;
+    }
+
+    public void setState(UserState state) {
+        this.state = state;
+    }
 
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof User){
             User other = (User) obj;
             if (this.getId().equals(other.getId())){
-                 return true;
+                return true;
             }
         }
         return false;
@@ -37,7 +88,7 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return new StringBuffer().append("ID: ").append(id).append("\nUsername: ").append(username).toString();
-    }*/
+    }
 
 
 }
