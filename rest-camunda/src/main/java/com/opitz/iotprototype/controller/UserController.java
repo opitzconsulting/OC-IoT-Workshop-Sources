@@ -1,11 +1,13 @@
 package com.opitz.iotprototype.controller;
 
-import com.opitz.iotprototype.entities.NetworkNode;
 import com.opitz.iotprototype.entities.User;
+import com.opitz.iotprototype.entities.UserState;
+import com.opitz.iotprototype.services.NetworkNodeService;
+import com.opitz.iotprototype.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,6 +21,12 @@ import java.util.List;
 @RequestMapping("/service/users")
 public class UserController {
 
+    @Autowired
+    NetworkNodeService networkNodeService;
+
+    @Autowired
+    UserService userService;
+
     /**
      * Set current state of a certain {@link User} by starting a new process instance.
      * <p/>
@@ -31,14 +39,20 @@ public class UserController {
      *
      * @param username unique user name
      * @param state    expected states: online or offline
-     * @return process instance id
+     * @return updated user resource
      */
     @ResponseBody
     @RequestMapping(value = "/{username}/state/{setState}", method = RequestMethod.PUT)
-    public String setUserState(@PathVariable("username") String username,
-                               @PathVariable("setState") String state) {
-        return "User " + username + "now is " + state;
+    public User setUserState(@PathVariable("username") String username,
+                               @PathVariable("setState") UserState state) {
+        User user = userService.load(username);
+        user.setState(state);
+        userService.save(user);
+        return user;
+
     }
+
+
 
     /**
      * Create a new {@link User}.
@@ -60,10 +74,8 @@ public class UserController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.POST)
     public User create(@RequestBody User user) {
-
-        //later in the service, the user will get an ID and this is a dummy ID
-        user.setId(42);
-        return user;
+        userService.save(user);
+        return userService.load(user.getUsername());
     }
 
     /**
@@ -82,9 +94,8 @@ public class UserController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.PUT)
     public User update(@RequestBody User user) {
-
-        //just returning the user again, later, the service will first update the ressource in the DB and then return the saved value
-        return user;
+        userService.update(user);
+        return userService.load(user.getId());
     }
 
     /**
@@ -93,16 +104,22 @@ public class UserController {
      * <p/>
      * <pre>
      * <b>REST call example:</b><br/>
-     * {@code DELETE .../users/<exampleUserID>}
+     * {@code DELETE .../users/<exampleUserName>}
      * </pre>
      *
-     * @param userID userID
+     * @param userID user id
      * @return true if deletion successful, otherwise false
      */
     @ResponseBody
     @RequestMapping(value = "/{userID}", method = RequestMethod.DELETE)
     public boolean delete(@PathVariable("userID") Integer userID) {
-        return true;
+        User user = userService.load(userID);
+        try {
+            userService.delete(user);
+            return true;
+        } catch (Exception e) {
+            return false; // TODO change return type to {@link HttpServletResponse}
+        }
     }
 
     /**
@@ -119,15 +136,7 @@ public class UserController {
     @ResponseBody
     @RequestMapping(method = RequestMethod.GET)
     public List<User> getAll() {
-
-        //creating some dummy values
-        List<User> list = new ArrayList<>();
-        User dummy = new User();
-        dummy.setId(42);
-        dummy.setPersonalDevice(new NetworkNode("FF:FF:FF:FF:FF:FF", "iottestphone", "192.168.1.101"));
-        dummy.setUsername("iotTestUser");
-        list.add(dummy);
-        return list;
+        return userService.listAll();
     }
 
     /**
@@ -144,9 +153,7 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/devices", method = RequestMethod.GET)
     public HashMap<String, String> getAllDevices() {
-        HashMap<String, String> sampleMap = new HashMap<>();
-        sampleMap.put("FF:FF:FF:FF:FF:FF", "iotTestUser");
-        return sampleMap;
+        return userService.getDeviceMACUserMap();
     }
 
     /**
@@ -164,11 +171,7 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/username/{username}", method = RequestMethod.GET)
     public User findByUsername(@PathVariable("username") String username) {
-        User dummy = new User();
-        dummy.setId(42);
-        dummy.setPersonalDevice(new NetworkNode("FF:FF:FF:FF:FF:FF", "iottestphone", "192.168.1.101"));
-        dummy.setUsername("iotTestUser");
-        return dummy;
+        return userService.load(username);
     }
 
 }
