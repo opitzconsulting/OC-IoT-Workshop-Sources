@@ -2,6 +2,7 @@ package com.opitz.iotprototype.controller;
 
 import com.opitz.iotprototype.entities.NetworkNode;
 import com.opitz.iotprototype.entities.User;
+import com.opitz.iotprototype.entities.UserState;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class UserController {
     @ResponseBody
     @RequestMapping(value = "/{username}/state/{setState}", method = RequestMethod.PUT)
     public String setUserState(@PathVariable("username") String username,
-                               @PathVariable("setState") String state) {
+                               @PathVariable("setState") UserState state) {
         return "User " + username + "now is " + state;
     }
 
