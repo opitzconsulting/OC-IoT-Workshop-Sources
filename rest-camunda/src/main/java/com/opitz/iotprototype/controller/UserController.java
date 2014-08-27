@@ -32,13 +32,13 @@ public class UserController {
      *
      * @param username unique user name
      * @param state    expected states: online or offline
-     * @return process instance id
+     * @return new user resource
      */
     @ResponseBody
     @RequestMapping(value = "/{username}/state/{setState}", method = RequestMethod.PUT)
-    public String setUserState(@PathVariable("username") String username,
+    public User setUserState(@PathVariable("username") String username,
                                @PathVariable("setState") UserState state) {
-        return "User " + username + "now is " + state;
+        return null;
     }
 
     /**
