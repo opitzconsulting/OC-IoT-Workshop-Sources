@@ -1,6 +1,5 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
        xmlns:tx="http://www.springframework.org/schema/tx" xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -8,18 +7,11 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/mvc
-        http://www.springframework.org/schema/mvc/spring-mvc.xsd
-        http://www.springframework.org/schema/jdbc
-        http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
-        http://www.springframework.org/schema/tx
-        http://www.springframework.org/schema/tx/spring-tx.xsd
-        http://www.springframework.org/schema/task
-        http://www.springframework.org/schema/task/spring-task.xsd">
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
+    <context:property-placeholder location="classpath:hibernate.properties" />
 
-    <context:property-placeholder location="classpath:hibernate.properties"/>
-
-    <context:component-scan base-package="com.opitz.iotprototype"/>
+    <context:component-scan base-package="com.opitz.iotprototype" />
 
     <mvc:annotation-driven>
         <mvc:message-converters>
@@ -27,22 +19,30 @@
             <bean
                     class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                 <property name="objectMapper">
-                    <bean class="com.opitz.iotprototype.utils.HibernateAwareObjectMapper"/>
+                    <bean class="com.opitz.iotprototype.utils.HibernateAwareObjectMapper" />
                 </property>
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
-    <mvc:default-servlet-handler/>
+    <mvc:default-servlet-handler />
 
-    <tx:annotation-driven/>
+    <!--activates @scheduled and @async annotations for scheduling -->
+    <task:annotation-driven />
+
+    <!-- database -->
+
+    <!-- database transactions manager -->
+    <tx:annotation-driven />
     <bean id="transactionManager"
           class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"></property>
     </bean>
 
+    <!-- hibernate config -->
+
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
+        <property name="dataSource" ref="dataSource" />
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
@@ -63,17 +63,16 @@
           class="org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy">
         <property name="targetDataSource">
             <bean class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-                <property name="driverClass" value="${jdbc.driverClassName}"/>
-                <property name="url" value="${jdbc.url}"/>
-                <property name="username" value="${jdbc.user}"/>
-                <property name="password" value="${jdbc.pass}"/>
+                <property name="driverClass" value="${jdbc.driverClassName}" />
+                <property name="url" value="${jdbc.url}" />
+                <property name="username" value="${jdbc.user}" />
+                <property name="password" value="${jdbc.pass}" />
             </bean>
         </property>
     </bean>
 
     <bean id="persistenceExceptionTranslationPostProcessor"
-          class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
-
+          class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor" />
 
     <!-- camunda process engine configuration -->
     <bean id="processEngineConfiguration"
@@ -107,6 +106,19 @@
     <bean id="managementService" factory-bean="processEngine"
           factory-method="getManagementService" />
 
-
+    <!-- camunda delegate services -->
+    <bean id="applyFirstUser" class="com.opitz.iotprototype.delegates.ApplyFirstUserDelegate" />
+    <bean id="switchKitchen" class="com.opitz.iotprototype.delegates.SwitchKitchenDelegate" />
+    <bean id="applyEnteringRules"
+          class="com.opitz.iotprototype.delegates.ApplyEnteringRulesDelegate" />
+    <bean id="switchSpecialPlug"
+          class="com.opitz.iotprototype.delegates.SwitchSpecialPlugDelegate" />
+    <bean id="switchOnPlug" class="com.opitz.iotprototype.delegates.SwitchOnPlugDelegate" />
+    <bean id="applyLastUser" class="com.opitz.iotprototype.delegates.ApplyLastUserDelegate" />
+    <bean id="switchOffAllPlug"
+          class="com.opitz.iotprototype.delegates.SwitchOffAllPlugDelegate" />
+    <bean id="applyLeavingRules"
+          class="com.opitz.iotprototype.delegates.ApplyLeavingRulesDelegate" />
+    <bean id="switchOffPlug" class="com.opitz.iotprototype.delegates.SwitchOffPlugDelegate" />
+    <bean id="setUserState" class="com.opitz.iotprototype.delegates.SetUserStateDelegate" />
 </beans>
-

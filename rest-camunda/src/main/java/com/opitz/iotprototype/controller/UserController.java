@@ -53,7 +53,7 @@ public class UserController {
     public String setUserState(@PathVariable("username") String username,
                                @PathVariable("setState") String state) {
         return this.startPlugSwitchProcess(username,
-                UserState.valueOf(state.toUpperCase()));
+                UserState.valueOf(state));
     }
 
     /**
