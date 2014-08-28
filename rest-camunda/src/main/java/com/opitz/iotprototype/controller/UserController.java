@@ -4,6 +4,8 @@ import com.opitz.iotprototype.entities.User;
 import com.opitz.iotprototype.entities.UserState;
 import com.opitz.iotprototype.services.NetworkNodeService;
 import com.opitz.iotprototype.services.UserService;
+import org.camunda.bpm.engine.RuntimeService;
+import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,11 @@ import java.util.List;
 @Controller
 @RequestMapping("/service/users")
 public class UserController {
+
+    private static final String PLUG_SWITCH_PROCESS_DEFINITION_KEY = "plug-switch-process";
+
+    @Autowired
+    RuntimeService runtimeService;
 
     @Autowired
     NetworkNodeService networkNodeService;
@@ -43,15 +50,31 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping(value = "/{username}/state/{setState}", method = RequestMethod.PUT)
-    public User setUserState(@PathVariable("username") String username,
-                               @PathVariable("setState") UserState state) {
-        User user = userService.load(username);
-        user.setState(state);
-        userService.save(user);
-        return user;
-
+    public String setUserState(@PathVariable("username") String username,
+                               @PathVariable("setState") String state) {
+        return this.startPlugSwitchProcess(username,
+                UserState.valueOf(state.toUpperCase()));
     }
 
+    /**
+     * Start plug switch process and return process instance id. (e.g. id can be
+     * used to get more info about the instance by the history service)
+     *
+     * @param username
+     *          unique user name
+     * @param state
+     *          requested {@link UserState}, allowed are {@link UserState#ONLINE}
+     *          or {@link UserState#OFFLINE}
+     * @return unique process instance id
+     */
+    private String startPlugSwitchProcess(String username, UserState state) {
+        HashMap<String, Object> variables = new HashMap<>();
+        variables.put("username", username);
+        variables.put("state", state.name().toLowerCase()); // TODO change to enum
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(
+                PLUG_SWITCH_PROCESS_DEFINITION_KEY, variables);
+        return "process instance with id " + processInstance.getId() + " done.";
+    }
 
 
     /**
