@@ -3,33 +3,52 @@ package com.opitz.iotprototype
 import com.opitz.iotprototype.entities.User;
 import java.util.HashSet;
 
-rule "Switch OFF chilloutArea for jack"
+rule "Switch OFF roomOne for userOne"
 when
-   u : User( username == "jack" )
+   u : User( username == "userOne" )
 then
    HashSet<String> specials = new HashSet<String>();
-   specials.add( "chilloutArea" );
+   specials.add( "roomOne" );
    insert( specials );
-   System.out.println("## drools: special rule to switch OFF chilloutArea for jack ##");
+   System.out.println( "## drools: special rule to switch OFF roomOne for userOne ##" );
 end
 
-rule "Switch OFF Office for PascalsAir"
+rule "Switch OFF roomTwo for userTwo"
 when
-   u : User( username == "PascalsAir" )
+   u : User( username == "userTwo" )
 then
    HashSet<String> specials = new HashSet<String>();
-   specials.add( "Office" );
+   specials.add( "roomTwo" );
    insert( specials );
-   System.out.println( "## drools: special rule to switch OFF Office for PascalsAir ##" );
+   System.out.println( "## drools: special rule to switch OFF roomTwo for userTwo ##" );
 end
 
-rule "Switch OFF bathroom and meetingroom for daniel"
+rule "Switch OFF roomThree for userThree"
 when
-   u : User( username == "daniel" )
+   u : User( username == "userThree" )
 then
    HashSet<String> specials = new HashSet<String>();
-   specials.add( "bathroom" );
-   specials.add( "meetingroom" );
+   specials.add( "roomThree" );
    insert( specials );
-   System.out.println( "## drools: special rule to switch OFF bathroom and meetingroom for daniel ##" );
+   System.out.println( "## drools: special rule to switch OFF roomThree for userThree ##" );
+end
+
+rule "Switch OFF roomFour for userFour"
+when
+   u : User( username == "userFour" )
+then
+   HashSet<String> specials = new HashSet<String>();
+   specials.add( "roomFour" );
+   insert( specials );
+   System.out.println( "## drools: special rule to switch OFF roomFour for userFour ##" );
+end
+
+rule "Switch OFF roomFive for userFive"
+when
+   u : User( username == "userFive" )
+then
+   HashSet<String> specials = new HashSet<String>();
+   specials.add( "roomFive" );
+   insert( specials );
+   System.out.println( "## drools: special rule to switch OFF roomFive for userFive ##" );
 end
