@@ -113,7 +113,6 @@
           class="com.opitz.iotprototype.delegates.ApplyEnteringRulesDelegate" />
     <bean id="switchSpecialPlug"
           class="com.opitz.iotprototype.delegates.SwitchSpecialPlugDelegate" />
-    <bean id="switchOnPlug" class="com.opitz.iotprototype.delegates.SwitchOnPlugDelegate" />
     <bean id="applyLastUser" class="com.opitz.iotprototype.delegates.ApplyLastUserDelegate" />
     <bean id="switchOffAllPlug"
           class="com.opitz.iotprototype.delegates.SwitchOffAllPlugDelegate" />
