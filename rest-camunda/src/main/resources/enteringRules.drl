@@ -3,6 +3,26 @@ package com.opitz.iotprototype
 import com.opitz.iotprototype.entities.User;
 import java.util.HashSet;
 
+rule "Switch ON iPhoneRoom for iPhone"
+when
+   u : User( username == "iPhone" )
+then
+   HashSet<String> specials = new HashSet<String>();
+   specials.add( "iPhoneRoom" );
+   insert( specials );
+   System.out.println( "## drools: special rule to switch ON iPhoneRoom for iPhone ##" );
+end
+
+rule "Switch ON nexusRoom for nexus"
+when
+   u : User( username == "nexus" )
+then
+   HashSet<String> specials = new HashSet<String>();
+   specials.add( "nexusRoom" );
+   insert( specials );
+   System.out.println( "## drools: special rule to switch ON nexusRoom for nexus ##" );
+end
+
 rule "Switch ON roomOne for userOne"
 when
    u : User( username == "userOne" )
@@ -12,6 +32,7 @@ then
    insert( specials );
    System.out.println( "## drools: special rule to switch ON roomOne for userOne ##" );
 end
+
 
 rule "Switch ON roomTwo for userTwo"
 when
