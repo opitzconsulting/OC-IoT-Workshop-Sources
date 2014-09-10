@@ -47,12 +47,6 @@ JNIEXPORT void JNICALL Java_com_opitz_jni_NativeRCSwitchAdapter_switchOn(JNIEnv 
 
     mySwitch.switchOn(sGroup, sChannel);
 
-    //releases the utf and informs the JVM about it
-    env->ReleaseStringUTFChars(env, jsGroup, csGroup);
-    env->ReleaseStringUTFChars(env, jsChannel, csChannel);
-
-
-
 }
 
 JNIEXPORT void JNICALL Java_com_opitz_jni_NativeRCSwitchAdapter_switchOff(JNIEnv * env, jobject obj, jstring jsGroup, jstring jsChannel ){
